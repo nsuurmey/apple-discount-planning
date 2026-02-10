@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+// @ts-nocheck
+import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts';
 
 export default function ApplePurchasingSimulator() {
-  const [mode, setMode] = useState('farmTypes');
   
   const defaultFarmTypes = [
     { id: 1, name: 'Full price', sharePercent: 60, minDiscount: 0, maxDiscount: 0 },
@@ -33,21 +33,21 @@ export default function ApplePurchasingSimulator() {
   const activeScenario = scenarios.find(s => s.id === activeScenarioId);
 
   // RNG functions
-  const createRNG = (seed) => {
+  const createRNG = (seed?: number) => {
     let state = seed || Math.floor(Math.random() * 1000000);
     return {
       random: () => {
         state = (state * 1103515245 + 12345) & 0x7fffffff;
         return state / 0x7fffffff;
       },
-      integers: (min, max) => {
+      integers: (min: number, max: number) => {
         return Math.floor(min + (max - min + 1) * (state = (state * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
       },
-      uniform: (min, max) => {
+      uniform: (min: number, max: number) => {
         state = (state * 1103515245 + 12345) & 0x7fffffff;
         return min + (max - min) * (state / 0x7fffffff);
       },
-      choice: (n, probs) => {
+      choice: (n: number, probs: number[]) => {
         const r = (state = (state * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
         let cumsum = 0;
         for (let i = 0; i < n; i++) {
